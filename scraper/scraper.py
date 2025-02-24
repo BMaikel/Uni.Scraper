@@ -91,8 +91,17 @@ def save_to_csv(data, headers, filename):
         print(f"Error al guardar el archivo CSV: {e}")
 
 
+def scrape_uni_pages(driver):
+    """Recorre todas las URLs y guarda los datos en archivos separados."""
+
+    for i, url in enumerate(URLS_UNI, start = 1):
+        filename = f"data/resultados_dia{i}.csv"
+        print(f"Scraping {url} y guardando en {filename} ...")
+        scrape_uni_results(driver, url, filename)
+    
+
 def scrape_unalm_results(driver, url, filename):
-    """Realiza el scraping de resultados unalm y guarda los datos en un archivo CSV."""
+    """Realiza el scraping de resultados unalm y guarda los datos en archivos CSV."""
 
     driver.get(url)
 
@@ -109,35 +118,4 @@ def scrape_unalm_results(driver, url, filename):
     for i in range(len(carreras)):
         carreras[i].click()
         sleep(3)
-
-        soup = BeautifulSoup(driver.page_source, "html.parser")
-        contenedor = soup.find("div", {"id": "contenedor-ingresantes"})
-
-        if contenedor:
-            filas = contenedor.find_all("div", recursive=False)  # Obtener solo los divs de primer nivel
-
-            for fila in filas:
-                columnas = [col.text.strip() for col in fila.find_all("div", recursive=False)]
-                if columnas:
-                    all_data.append(columnas)
-
-    with open(filename, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerows(all_data)
-
-    print(f"Datos guardados en {filename}")
-
-
-def scrape_uni_pages(driver):
-    """Recorre todas las URLs y guarda los datos en archivos separados."""
-
-    for i, url in enumerate(URLS_UNI, start = 1):
-        filename = f"data/resultados_dia{i}.csv"
-        print(f"Scraping {url} y guardando en {filename} ...")
-        scrape_uni_results(driver, url, filename)
-    
-
-def scrape_unalm(driver):
-    """Recorre todas las URLs y guarda los datos en archivos separados."""
-    scrape_unalm_results(driver, URL_UNALM, "test")
-    
+        driver.back()

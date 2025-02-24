@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.service import Service
-from scraper import scrape_uni_pages, scrape_unalm
+from scraper import scrape_uni_pages, scrape_unalm_results
 
 import os
 
@@ -17,7 +17,7 @@ def main():
 
     with Chrome(service=service, options=options) as driver:
         #scrape_uni_pages(driver)
-        scrape_unalm(driver)
+        scrape_unalm_results(driver, "https://resultados.lamolina.edu.pe/resultados", "h")
 
 
 if __name__ == "__main__":
